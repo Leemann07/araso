@@ -20,6 +20,13 @@ app=build/Araso.app
 rm -rf "$app"
 mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources"
 cp "$bin/Araso" "$app/Contents/MacOS/Araso"
+# Swift 6.1 toolchains (Xcode 16) link AzooKey's llama.framework even without the Zenzai trait;
+# the app then has to carry it.
+if otool -L "$app/Contents/MacOS/Araso" | grep -q 'llama.framework'; then
+  mkdir -p "$app/Contents/Frameworks"
+  cp -R "$bin/llama.framework" "$app/Contents/Frameworks/"
+  install_name_tool -add_rpath @executable_path/../Frameworks "$app/Contents/MacOS/Araso"
+fi
 cp Resources/Info.plist "$app/Contents/Info.plist"
 # The input source's name in System Settings comes from these, not Info.plist.
 cp -R Resources/*.lproj "$app/Contents/Resources/"
@@ -62,9 +69,11 @@ if [[ -z $sign ]]; then
   done
 fi
 if [[ -n $sign && $sign != - ]]; then
+  for framework in "$app"/Contents/Frameworks/*.framework(N); do codesign --force --options runtime --sign "$sign" "$framework"; done
   codesign --force --options runtime --sign "$sign" "$app"
   echo "signed with $(codesign -dvv "$app" 2>&1 | sed -n 's/^Authority=//p' | head -1)"
 else
+  for framework in "$app"/Contents/Frameworks/*.framework(N); do codesign --force --sign - "$framework"; done
   codesign --force --sign - "$app"
   echo "signed ad hoc"
 fi
