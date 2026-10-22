@@ -7,12 +7,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 FrequencyWords' no_full.txt) + English (SCOWL), with æ ø å as three extra symbols
 (`LatinLayout.extraLetters`, `EnglishModel.isLatinLetter`). `LatinLayout.norwegian` (the default)
 puts ø æ å on the ; ' [ keys (key codes 41, 39, 33), so the layout rows have 11 seats in the top two
-rows; the other layouts type those two keys as themselves. Letter trigrams train on the shipped list
-(`spellingListPath` is nil), not /usr/share/dict/words. `checkForUpdates` defaults to false: the
+rows; the other layouts type those two keys as themselves. Letter trigrams train on /usr/share/dict/words plus
+the shipped list (trained on the list alone, Korean keys like nn, rt read as Latin). `checkForUpdates` defaults to false: the
 check asks nyttastudio/araso, whose pkg would replace this build. Data: `tools/prepare.sh --models`
 runs `tools/build_norwegian_words.py`. Tests: `Tests/ArasoCoreTests/NorwegianTests.swift`. Japanese
 tests whose words are Norwegian or read as Latin under the Norwegian trigrams (googlede: `de`,
-redde, sitede, kitte, ufos, rireki, nn) are `.disabled` with that reason; Japanese is off by
+redde, sitede, kitte, ufos, rireki) are `.disabled` with that reason; Japanese is off by
 default here and a Latin word + Japanese particle no longer splits.
 
 Araso is a macOS InputMethodKit input method: the user types on QWERTY and Araso decides per

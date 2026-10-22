@@ -492,8 +492,7 @@ import Testing
         }
     }
 
-    @Test(.disabled("Norwegian fork: the Latin model is Norwegian + English, so nn scores differently and the chat reading isn't reached"))
-    func showsWhatSpaceCommits() {
+    @Test func showsWhatSpaceCommits() {
         type("nn")
         #expect(field.text == "ㅜㅜ")
         type(" ")
@@ -514,8 +513,7 @@ import Testing
         #expect(field.text == word + " ")
     }
 
-    @Test(.disabled("Norwegian fork: the Latin model is Norwegian + English, so nn scores differently and the chat reading isn't reached"))
-    func switchKeyReachesTheChatReading() {
+    @Test func switchKeyReachesTheChatReading() {
         type("nn⎋⎋⎋")
         #expect(field.text == "ㅜㅜ")
         type(" ⎋")

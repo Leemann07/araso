@@ -29,9 +29,11 @@ public final class EnglishModel: @unchecked Sendable {
     public static let commonLevel = 20
     /// Level given to `commonWords` (tech terms and slang SCOWL lacks): known, not "common".
     static let extraLevel = 35
-    /// Upstream trains the letter trigrams on macOS's /usr/share/dict/words (English only). The
-    /// fork trains them on its own Norwegian + English list, so no spelling file is used.
-    public static let spellingListPath: String? = nil
+    /// Letter trigrams come from this list when it's there (macOS ships it): its 235k words
+    /// separate English spelling from Korean keys better than SCOWL's 119k (measured). The fork
+    /// adds its own Norwegian + English list to it; trained on that list alone, Korean keys like
+    /// nn, rt and flfprl read as Latin.
+    public static let spellingListPath: String? = "/usr/share/dict/words"
 
     /// Loading the word list takes a moment; share one instance.
     public static let shared = EnglishModel(listURL: Resources.englishWords, spellingPath: spellingListPath)
@@ -51,7 +53,8 @@ public final class EnglishModel: @unchecked Sendable {
         for word in extraWords { levels[word.lowercased()] = min(levels[word.lowercased()] ?? Self.extraLevel, Self.extraLevel) }
         let spelling = spellingPath.flatMap { try? String(contentsOfFile: $0, encoding: .utf8) }?
             .split(whereSeparator: \.isNewline).map { $0.lowercased() }
-        self.init(levels: levels, spelling: spelling.map { $0 + extraWords }, stems: listed)
+        // The fork adds the list's own words, so Norwegian spelling and æ ø å are learned too.
+        self.init(levels: levels, spelling: spelling.map { $0 + Array(listed.keys) + extraWords }, stems: listed)
     }
 
     /// For tests: these words at a middle level.

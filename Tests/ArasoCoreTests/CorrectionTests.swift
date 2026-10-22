@@ -80,12 +80,11 @@ import Testing
 
     /// A word added for one app is typed so there only.
     @Test func wordAddedForAnApp() {
-        // dkssud, not rt: with Norwegian trigrams (kort, svart) rt reads as Latin on its own.
-        learning.add(.init(keys: "dkssud", language: .english, source: .user, apps: ["com.apple.TextEdit"]))
-        type("dkssud ")
+        learning.add(.init(keys: "rt", language: .english, source: .user, apps: ["com.apple.TextEdit"]))
+        type("rt ")
         session.activate(app: "com.apple.Notes")
-        type("dkssud ")
-        #expect(field.text == "dkssud 안녕 ")
+        type("rt ")
+        #expect(field.text == "rt ㄱㅅ ")
     }
 
     /// Esc after a commit passing through other readings records only where it ended up.
