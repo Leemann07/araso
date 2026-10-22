@@ -1,14 +1,6 @@
 // swift-tools-version:6.1
 import PackageDescription
 
-// `isolated deinit` (AppleJapaneseConverter) is a language feature of Swift 6.2 (Xcode 26); an
-// older toolchain has it behind an experimental flag, so a Mac on Xcode 16 builds too.
-#if compiler(>=6.2)
-let coreSettings: [SwiftSetting] = []
-#else
-let coreSettings: [SwiftSetting] = [.enableExperimentalFeature("IsolatedDeinit")]
-#endif
-
 let package = Package(
     name: "Araso",
     platforms: [.macOS(.v13)],
@@ -26,7 +18,7 @@ let package = Package(
             // The dictionary is shipped in Araso.app/Contents/Resources and passed by path
             // (see JapaneseConverter), not through an SPM resource bundle.
             .product(name: "KanaKanjiConverterModule", package: "AzooKeyKanaKanjiConverter"),
-        ], swiftSettings: coreSettings),
+        ]),
         .executableTarget(name: "Araso", dependencies: ["ArasoCore"]),
         .executableTarget(name: "araso-cli", dependencies: ["ArasoCore"]),
         .testTarget(name: "ArasoCoreTests", dependencies: ["ArasoCore"]),

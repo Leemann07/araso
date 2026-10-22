@@ -55,7 +55,13 @@ public final class AppleJapaneseConverter: JapaneseConverter {
         guard !candidates(for: "へんかん").isEmpty else { return nil }
     }
 
+#if compiler(>=6.2)
     isolated deinit { release(engine) }
+#else
+    // `isolated deinit` is Swift 6.2; Xcode 16's compiler refuses the experimental flag. The
+    // engine is released from whichever thread drops the last reference.
+    deinit { release(engine) }
+#endif
 
     nonisolated public static var learningURL: URL? {
         SupportDirectory.url?.appendingPathComponent("apple-learning.json")
