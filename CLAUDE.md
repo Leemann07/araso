@@ -2,6 +2,16 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+**This checkout is the Korean · Norwegian fork.** `Language.english`, `EnglishModel` and
+`english_words.txt` keep their names but mean the Latin side: Norwegian (bokmål, by frequency from
+FrequencyWords' no_full.txt) + English (SCOWL), with æ ø å as three extra symbols
+(`LatinLayout.extraLetters`, `EnglishModel.isLatinLetter`). `LatinLayout.norwegian` (the default)
+puts ø æ å on the ; ' [ keys (key codes 41, 39, 33), so the layout rows have 11 seats in the top two
+rows; the other layouts type those two keys as themselves. Letter trigrams train on the shipped list
+(`spellingListPath` is nil), not /usr/share/dict/words. `checkForUpdates` defaults to false: the
+check asks nyttastudio/araso, whose pkg would replace this build. Data: `tools/prepare.sh --models`
+runs `tools/build_norwegian_words.py`. Tests: `Tests/ArasoCoreTests/NorwegianTests.swift`.
+
 Araso is a macOS InputMethodKit input method: the user types on QWERTY and Araso decides per
 word whether it is English, Korean (2-set) or Japanese romaji (kanji through macOS's own engine, AzooKey where it can't be loaded). README.md
 (Korean, the main one) and README.en.md (English) cover the keys, settings files, accuracy numbers

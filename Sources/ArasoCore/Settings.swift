@@ -20,7 +20,8 @@ public struct Settings: Codable, Equatable, Sendable {
     public var returnConfirmsOnly: Bool = true
     /// Once a day, ask GitHub for the latest release's version (nothing else is sent), and offer
     /// it in the input menu and About when it is newer.
-    public var checkForUpdates: Bool = true
+    /// Off in the fork: the check asks nyttastudio/araso, whose installer would replace this build.
+    public var checkForUpdates: Bool = false
     /// Kanji conversion: "apple", macOS's own Japanese engine (AzooKey where it can't be loaded),
     /// or "azooKey".
     public var japaneseEngine: String = "apple"
@@ -30,15 +31,15 @@ public struct Settings: Codable, Equatable, Sendable {
     public var fullWidthSpace: Bool = false
     /// The layout English and romaji are typed on: "qwerty", "colemak" or "colemakDH". Korean
     /// 2-set stays on its keys either way (`LatinLayout`).
-    public var latinLayout: LatinLayout = .qwerty
+    public var latinLayout: LatinLayout = .norwegian
     /// The layout Korean is typed on: "dubeolsik" or "sebeolsikFinal" (`KoreanLayout`).
     public var koreanLayout: KoreanLayout = .dubeolsik
     /// The layout romaji is typed on, when not English's (`latinLayout`): absent follows it.
     public var japaneseLayout: LatinLayout?
 
     public init(japanese: Bool = false, liveConversion: Bool = false, pauseKey: PauseKey = .standard,
-                returnConfirmsOnly: Bool = true, checkForUpdates: Bool = true, japaneseEngine: String = "apple",
-                fullWidthDigits: Bool = false, fullWidthSpace: Bool = false, latinLayout: LatinLayout = .qwerty,
+                returnConfirmsOnly: Bool = true, checkForUpdates: Bool = false, japaneseEngine: String = "apple",
+                fullWidthDigits: Bool = false, fullWidthSpace: Bool = false, latinLayout: LatinLayout = .norwegian,
                 koreanLayout: KoreanLayout = .dubeolsik, japaneseLayout: LatinLayout? = nil) {
         self.latinLayout = latinLayout
         self.koreanLayout = koreanLayout
@@ -65,11 +66,11 @@ public struct Settings: Codable, Equatable, Sendable {
         let rightCommandPause = ((try? legacy?.decodeIfPresent(Bool.self, forKey: .rightCommandPause)) ?? nil) ?? true
         pauseKey = value(.pauseKey, rightCommandPause ? .standard : .off)
         returnConfirmsOnly = value(.returnConfirmsOnly, true)
-        checkForUpdates = value(.checkForUpdates, true)
+        checkForUpdates = value(.checkForUpdates, false)
         japaneseEngine = value(.japaneseEngine, "apple")
         fullWidthDigits = value(.fullWidthDigits, false)
         fullWidthSpace = value(.fullWidthSpace, false)
-        latinLayout = value(.latinLayout, .qwerty)
+        latinLayout = value(.latinLayout, .norwegian)
         koreanLayout = value(.koreanLayout, .dubeolsik)
         japaneseLayout = value(.japaneseLayout, nil as LatinLayout?)
     }

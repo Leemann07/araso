@@ -30,7 +30,8 @@ public enum Resources {
         url("text_trigrams.txt", development: packageRoot.appendingPathComponent("Sources/ArasoCore/Data/text_trigrams.txt"))
     }
 
-    /// English words with their SCOWL level, 10 (most common) to 60 (build_english_words.py).
+    /// Norwegian (by frequency) and English (SCOWL) words with a level, 10 (most common) to 60
+    /// (build_norwegian_words.py over build_english_words.py's output).
     public static var englishWords: URL? {
         url("english_words.txt", development: packageRoot.appendingPathComponent("Sources/ArasoCore/Data/english_words.txt"))
     }

@@ -3,6 +3,14 @@
 Araso decides per word between English, Korean and Japanese from the keys typed. Until 0.2.2 it
 assumed QWERTY for English and romaji and 2-set (두벌식) for Korean. This is how other layouts fit.
 
+## Norwegian (this fork's default)
+
+`"latinLayout": "norwegian"`: QWERTY's letters, plus ø on the ; key, æ on the ' key and å on the [
+key, as on a Norwegian Mac keyboard (key codes 41, 39, 33). Those keys are letter seats here, so a
+word with one of them keeps composing and reads as Latin only: 2-set has no jamo on them, so
+`HangulComposer.compose` returns nil and the Korean score is absent. The Latin model's alphabet is
+a–z plus æ ø å (`LatinLayout.extraLetters`). On the other layouts the ' and [ keys type themselves.
+
 ## English layouts (done: Colemak, Colemak-DH)
 
 `settings.json`'s `"latinLayout"`: `"qwerty"` (default), `"colemak"` or `"colemakDH"`; the

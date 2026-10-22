@@ -1,10 +1,19 @@
 import Foundation
 
-/// Character-trigram language model plus a word list with how common each word is, from
-/// SCOWL (Data/english_words.txt: word<TAB>level, 10 = most common … 60).
+/// Character-trigram language model plus a word list with how common each word is: the Latin
+/// side of the decision. In this fork the list is Norwegian (bokmål, by frequency) and English
+/// (SCOWL) together (Data/english_words.txt: word<TAB>level, 10 = most common … 60;
+/// tools/build_norwegian_words.py), and the letters are a–z plus æ, ø, å.
 public final class EnglishModel: @unchecked Sendable {
-    // Symbols: 0 = word boundary, 1...26 = a...z
-    private static let symbols = 27
+    // Symbols: 0 = word boundary, 1...26 = a...z, then `LatinLayout.extraLetters` (æ ø å)
+    private static let symbols = 27 + LatinLayout.extraLetters.count
+    private static let extraCodes: [Character: Int] = Dictionary(uniqueKeysWithValues:
+        LatinLayout.extraLetters.enumerated().map { ($1, 27 + $0) })
+
+    /// A letter the model reads: a–z or one of the layout's extra letters (æ ø å), either case.
+    static func isLatinLetter(_ ch: Character) -> Bool {
+        ch.isASCII && ch.isLetter || ch.lowercased().first.flatMap { extraCodes[$0] } != nil
+    }
     private var trigrams: [Float]
     private var contexts: [Float]
     /// SCOWL level of each word (lowercase, letters only).
@@ -20,9 +29,9 @@ public final class EnglishModel: @unchecked Sendable {
     public static let commonLevel = 20
     /// Level given to `commonWords` (tech terms and slang SCOWL lacks): known, not "common".
     static let extraLevel = 35
-    /// Letter trigrams come from this list when it's there (macOS ships it): its 235k words
-    /// separate English spelling from Korean keys better than SCOWL's 119k (measured).
-    public static let spellingListPath = "/usr/share/dict/words"
+    /// Upstream trains the letter trigrams on macOS's /usr/share/dict/words (English only). The
+    /// fork trains them on its own Norwegian + English list, so no spelling file is used.
+    public static let spellingListPath: String? = nil
 
     /// Loading the word list takes a moment; share one instance.
     public static let shared = EnglishModel(listURL: Resources.englishWords, spellingPath: spellingListPath)
@@ -59,7 +68,7 @@ public final class EnglishModel: @unchecked Sendable {
             levels.reserveCapacity(raw.count)
             for (raw, level) in raw {
                 let word = raw.filter { $0 != "'" }
-                guard !word.isEmpty, word.allSatisfy({ $0.isASCII && $0.isLetter }) else { continue }
+                guard !word.isEmpty, word.allSatisfy(Self.isLatinLetter) else { continue }
                 // Many 1–2 letter list entries aren't words people type ("ra", "ko"); only real ones count.
                 if word.count > 2 || Self.shortWords.contains(word) { levels[word] = min(levels[word] ?? level, level) }
             }
@@ -67,7 +76,7 @@ public final class EnglishModel: @unchecked Sendable {
         }
         let levels = normalized(raw)
         stemLevels = stems.map(normalized)
-        for word in spelling ?? Array(levels.keys) where !word.isEmpty && word.allSatisfy({ $0.isASCII && $0.isLetter }) {
+        for word in spelling ?? Array(levels.keys) where !word.isEmpty && word.allSatisfy(Self.isLatinLetter) {
             let codes = Self.encode(word)
             for i in 2..<codes.count {
                 tri[(codes[i - 2] * n + codes[i - 1]) * n + codes[i]] += 1
@@ -84,9 +93,13 @@ public final class EnglishModel: @unchecked Sendable {
     /// [^, ^, letters..., $] with ^ and $ both encoded as 0.
     private static func encode(_ word: String) -> [Int] {
         var codes = [0, 0]
-        for scalar in word.unicodeScalars {
-            let v = Int(scalar.value)
-            if v >= 97 && v <= 122 { codes.append(v - 96) }
+        for ch in word {
+            if let code = extraCodes[ch] {
+                codes.append(code)
+            } else if let scalar = ch.unicodeScalars.first, ch.unicodeScalars.count == 1 {
+                let v = Int(scalar.value)
+                if v >= 97 && v <= 122 { codes.append(v - 96) }
+            }
         }
         codes.append(0)
         return codes
@@ -118,8 +131,9 @@ public final class EnglishModel: @unchecked Sendable {
         func consider(_ stem: String) {
             if let l = (stemLevels ?? levels)[stem], l < Self.knownLevel { best = min(best ?? l, l) }
         }
-        // Stems of 3+ letters: ths isn't the+s, ehs isn't eh+s.
-        for suffix in ["s", "es", "ed", "d", "ing", "ly", "er", "ers", "est"] where w.count > suffix.count + 2 && w.hasSuffix(suffix) {
+        // Stems of 3+ letters: ths isn't the+s, ehs isn't eh+s. Norwegian inflections too:
+        // bilen, huset, bilene, biler (en, et, ene, er), kjøpte, levde (te, de).
+        for suffix in ["s", "es", "ed", "d", "ing", "ly", "er", "ers", "est", "en", "et", "ene", "te", "de"] where w.count > suffix.count + 2 && w.hasSuffix(suffix) {
             let stem = String(w.dropLast(suffix.count))
             consider(stem)
             consider(stem + "e")
@@ -146,6 +160,7 @@ public final class EnglishModel: @unchecked Sendable {
     static let shortWords: Set<String> = Set("""
     a i ad ah am an as at aw ax be by do eh go ha he hi hm if in is it lo ma me mo my no of oh ok on or ow ox pa
     pc so to tv uh um up us we ya ye yo id ex vs ai ui ux os js ts
+    å og er du de en et ei på om så nå ja da ut vi av ha la se si gå få bo by øl øy ås må få få to tre nei ok
     """.split(whereSeparator: \.isWhitespace).map(String.init))
 
     /// Everyday/technical words SCOWL is missing or ranks rare.

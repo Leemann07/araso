@@ -45,8 +45,8 @@ done
 section "llama.cpp (linked through AzooKeyKanaKanjiConverter)" scripts/third-party/llama.cpp-LICENSE
 section "azooKey dictionary (Contents/Resources/Dictionary)" "${dictionary:h}/LICENSE"
 section "Tatoeba (kana, written-Japanese, Korean syllable and word models)" scripts/third-party/tatoeba.txt
-section "SCOWL (english_words.txt)" scripts/third-party/scowl-Copyright
-section "FrequencyWords (korean_vocabulary.txt)" scripts/third-party/frequencywords.txt
+section "SCOWL (english_words.txt, the English words)" scripts/third-party/scowl-Copyright
+section "FrequencyWords (korean_vocabulary.txt; english_words.txt, the Norwegian words)" scripts/third-party/frequencywords.txt
 # Signed with an identity when there is one: ARASO_APP_SIGN, else this keychain's Apple
 # Development identity (a free Apple ID in Xcode gives one), else its Developer ID Application.
 # After a reinstall swaps the executable, macOS starts an ad hoc copy no more (imklaunchagent:

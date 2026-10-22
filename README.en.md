@@ -45,6 +45,16 @@ Hello, worldhasaishonopuroguramudesu␣.           →  Hello, worldは最初の
   <img src="docs/media/demo.gif" width="720" alt="Choosing Araso once from the input menu, then typing on QWERTY into Safari without switching the input source again, with the keys pressed and the language each word came out in shown below: Stay hungry, stay foolish는 잡스의 말이다. / 吾輩は猫である는 소세키의 소설이다. / Hello, worldは最初のプログラムです。">
 </p>
 
+> [!NOTE]
+> **This is the Korean · Norwegian fork** of [nyttastudio/araso](https://github.com/nyttastudio/araso): the Latin side is
+> Norwegian (bokmål) and English together, so each word is decided between Korean and Norwegian/English.
+> The default layout is the Norwegian Mac keyboard (`;` `'` `[` type ø æ å; `Norsk (QWERTY + æøå)` in Settings →
+> Languages, or QWERTY on a US keyboard). A word with æ, ø or å is always Latin. Norwegian word frequencies come from
+> [hermitdave/FrequencyWords](https://github.com/hermitdave/FrequencyWords) (OpenSubtitles, CC-BY-SA 4.0), English from
+> SCOWL (`tools/build_norwegian_words.py`). The update check is off, since upstream's installer would replace this
+> build: install from source with `scripts/install.sh`, not the pkg or `get.sh` below. Read "English" below as
+> "Norwegian/English".
+
 ## At a glance
 
 - **Decided per word**: English, Korean or Japanese, whichever each word is. No input source to switch.

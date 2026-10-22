@@ -24,6 +24,20 @@
 
 <p align="center"><a href="https://nyttastudio.com/araso/">웹사이트</a> · 한국어 · <a href="README.en.md">English</a></p>
 
+> [!NOTE]
+> **한국어 · 노르웨이어 포크입니다.** [nyttastudio/araso](https://github.com/nyttastudio/araso)를 바탕으로, 영어 자리에
+> 노르웨이어(bokmål)와 영어를 함께 둔 버전입니다. 단어마다 한국어인지 노르웨이어·영어인지 알아서 고릅니다.
+> - **자판**: 노르웨이어 Mac 자판(`;` `'` `[` 키가 ø æ å)을 기본으로 씁니다. 설정 → 언어 → 자판에서 `Norsk (QWERTY + æøå)`이고,
+>   US 자판이면 QWERTY로 바꾸면 됩니다(그때는 æ ø å를 칠 수 없습니다).
+> - **판단**: æ ø å가 든 단어는 한글 키가 아니므로 늘 라틴 문자입니다. 나머지는 노르웨이어·영어 단어 목록과 글자
+>   3-그램, 한국어 음절 점수로 고릅니다. `kjøpdp` → `kjøp에`처럼 노르웨이어 단어 + 조사도 나눕니다.
+> - **데이터**: 노르웨이어 단어 빈도는 [hermitdave/FrequencyWords](https://github.com/hermitdave/FrequencyWords)(OpenSubtitles,
+>   CC-BY-SA 4.0)에서, 영어는 SCOWL에서 옵니다. `tools/build_norwegian_words.py`, `tools/prepare.sh --models`.
+> - **업데이트 확인은 꺼져 있습니다.** 원본의 설치 파일이 이 빌드를 덮어쓰기 때문입니다. 아래 설치 안내의 pkg와 `get.sh`는
+>   원본 릴리스를 받으니, 이 포크는 `scripts/install.sh`로 직접 빌드해 설치하세요.
+> - 일본어 기능은 원본 그대로 남아 있고 기본으로 꺼져 있습니다. 아래 본문은 원본 README이며, "영어"는 이 포크에서
+>   "노르웨이어·영어"로 읽으면 됩니다.
+
 <h3 align="center">한/영 키는 이제 누르지 않아도 됩니다.</h3>
 
 <p align="center">

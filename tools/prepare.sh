@@ -17,6 +17,7 @@ words=https://raw.githubusercontent.com/hermitdave/FrequencyWords/master/content
 [[ -f data/ko_50k.txt ]] || fetch $words/ko/ko_50k.txt data/ko_50k.txt
 [[ -f data/ko_full.txt ]] || fetch $words/ko/ko_full.txt data/ko_full.txt   # korean_vocabulary.txt
 [[ -f data/en_50k.txt ]] || fetch $words/en/en_50k.txt data/en_50k.txt
+[[ -f data/no_full.txt ]] || fetch $words/no/no_full.txt data/no_full.txt     # the fork's Norwegian words
 for lang in jpn kor; do
   if [[ ! -f data/${lang}_sentences.tsv ]]; then
     fetch https://downloads.tatoeba.org/exports/per_language/$lang/${lang}_sentences.tsv.bz2 data/${lang}_sentences.tsv.bz2
@@ -42,7 +43,8 @@ if [[ "${1:-}" == "--models" ]]; then
   python3 build_text_model.py data/ja_tokens.jsonl ../Sources/ArasoCore/Data/text_trigrams.txt 2
   python3 build_korean_syllables.py data/kor_sentences.tsv ../Sources/ArasoCore/Data/korean_syllables.txt
   python3 build_korean_words.py data/kor_sentences.tsv ../Sources/ArasoCore/Data/korean_words.txt
-  python3 build_english_words.py data/scowl/final ../Sources/ArasoCore/Data/english_words.txt
+  python3 build_english_words.py data/scowl/final data/english_words.scowl.txt
+  python3 build_norwegian_words.py data/no_full.txt data/english_words.scowl.txt ../Sources/ArasoCore/Data/english_words.txt
   (cd .. && swift build -c release --product araso-cli)
 fi
 
