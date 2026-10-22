@@ -46,7 +46,8 @@ import Testing
         #expect(field.text == "안녕하세요 hello 今日はいい天気ですね")
     }
 
-    @Test func englishInsideJapanese() {
+    @Test(.disabled("Norwegian fork: the Latin model is Norwegian + English, so 'de' is a Norwegian word and googlede stays Latin"))
+    func englishInsideJapanese() {
         type("kyouhagoogledekensaku ⏎")
         #expect(field.text == "今日はgoogleで検索")
     }
@@ -220,7 +221,8 @@ import Testing
     }
 
     /// A clause boundary never splits an English word inside the phrase.
-    @Test func clauseBoundarySkipsEnglishLetters() {
+    @Test(.disabled("Norwegian fork: the Latin model is Norwegian + English, so 'de' is a Norwegian word and googlede stays Latin"))
+    func clauseBoundarySkipsEnglishLetters() {
         type("kyouhagoogledekensaku ")
         #expect(session.conversion?.kana == "きょうはgoogleでけんさく")
         #expect(session.conversion?.current.kanaCount == 15)

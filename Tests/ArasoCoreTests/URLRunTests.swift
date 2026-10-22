@@ -39,7 +39,7 @@ import Testing
         #expect(field.text.hasSuffix("@gmail.com "))
     }
 
-    @Test(arguments: [("@dlrjs ", "@이건 "), ("ska/du ", "남/여 "), ("TV/fkeldh ", "TV/라디오 "),
+    @Test(arguments: [("@dlrjs ", "@이건 "), ("gkrtod/wlrdnjs ", "학생/직원 "), ("TV/fkeldh ", "TV/라디오 "),
                       ("L.A.fh ", "L.A.로 "), ("1:1ansdml ", "1:1문의 "), ("/sk ", "/나 ")])
     func noMarkerNoChange(_ keys: String, _ text: String) {
         type(keys)

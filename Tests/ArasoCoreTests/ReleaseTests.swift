@@ -124,13 +124,14 @@ import Testing
         #expect(!Release.isNewer("0.2.0-beta.1", than: "0.1.9"))
     }
 
-    @Test func updateChecksAreOnUnlessTurnedOff() throws {
+    /// The fork's default is off (the check asks upstream's releases); turning it on is kept.
+    @Test func updateChecksAreOffUnlessTurnedOn() throws {
         let dir = FileManager.default.temporaryDirectory.appendingPathComponent("araso-release-\(UUID().uuidString)")
         let url = dir.appendingPathComponent("settings.json")
         try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         try Data(#"{ "japanese": true }"#.utf8).write(to: url)
-        #expect(Settings.load(from: url).checkForUpdates)
-        try Settings(checkForUpdates: false).save(to: url)
         #expect(!Settings.load(from: url).checkForUpdates)
+        try Settings(checkForUpdates: true).save(to: url)
+        #expect(Settings.load(from: url).checkForUpdates)
     }
 }

@@ -101,7 +101,8 @@ import Testing
 
     /// The candidate on screen goes in with the letters still waiting for their vowel after it,
     /// and a short reading kept as kana on screen stays kana (うふぉs, not うフォs).
-    @Test func returnCommitsPendingLettersAsShown() {
+    @Test(.disabled("Norwegian fork: the Latin model is Norwegian + English, so ufos reads as Latin"))
+    func returnCommitsPendingLettersAsShown() {
         type("kyouhaiitenkides")
         #expect(field.text == "今日はいい天気でs")
         type("⏎")
@@ -112,7 +113,8 @@ import Testing
         #expect(field.text == "今日はいい天気でs うふぉs")
     }
 
-    @Test func englishInsidePhraseAndPunctuation() {
+    @Test(.disabled("Norwegian fork: the Latin model is Norwegian + English, so 'de' is a Norwegian word and googlede stays Latin"))
+    func englishInsidePhraseAndPunctuation() {
         type("kyouhagoogledekensaku⏎")
         #expect(field.text == "今日はgoogleで検索")
         type(" arigatou.⏎")

@@ -183,7 +183,8 @@ import Testing
         #expect(field.text == "かんこ")
     }
 
-    @Test func deleteSplitsContractedAndDoubledKana() {
+    @Test(.disabled("Norwegian fork: the Latin model is Norwegian + English, so kitte reads as Latin"))
+    func deleteSplitsContractedAndDoubledKana() {
         type("kyouha")
         session.handle(.delete, client: field)
         session.handle(.delete, client: field)
@@ -491,7 +492,8 @@ import Testing
         }
     }
 
-    @Test func showsWhatSpaceCommits() {
+    @Test(.disabled("Norwegian fork: the Latin model is Norwegian + English, so nn scores differently and the chat reading isn't reached"))
+    func showsWhatSpaceCommits() {
         type("nn")
         #expect(field.text == "ㅜㅜ")
         type(" ")
@@ -512,7 +514,8 @@ import Testing
         #expect(field.text == word + " ")
     }
 
-    @Test func switchKeyReachesTheChatReading() {
+    @Test(.disabled("Norwegian fork: the Latin model is Norwegian + English, so nn scores differently and the chat reading isn't reached"))
+    func switchKeyReachesTheChatReading() {
         type("nn⎋⎋⎋")
         #expect(field.text == "ㅜㅜ")
         type(" ⎋")

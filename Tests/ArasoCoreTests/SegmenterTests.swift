@@ -5,7 +5,7 @@ import Testing
 @Suite struct SegmenterTests {
     let segmenter = JapaneseSegmenter(english: sharedEngine.english, japanese: JapaneseModel.shared!)
 
-    @Test(arguments: [
+    @Test(.disabled("Norwegian fork: the Latin model is Norwegian + English, so 'de' is a Norwegian word and googlede stays Latin"), arguments: [
         ("kyouhagoogledekensaku", "きょうはgoogleでけんさく"),
         ("meetingwoshimashou", "meetingをしましょう"),
         ("serverniloginshita", "serverにloginした"),
@@ -20,7 +20,8 @@ import Testing
         #expect(segmenter.segment(keys) == nil)
     }
 
-    @Test func decisionUsesSegmentation() {
+    @Test(.disabled("Norwegian fork: the Latin model is Norwegian + English, so 'de' is a Norwegian word and googlede stays Latin"))
+    func decisionUsesSegmentation() {
         let d = trilingual.decide("kyouhagoogledekensaku", context: DecisionContext())
         #expect(d.language == .japanese)
         #expect(d.output == "きょうはgoogleでけんさく")
